@@ -20,7 +20,7 @@ require( ['jquery', 'React', 'JSXTransformer', 'classnames', 'documentRegisterEl
             function(reactComponents, cartWidget, reactiveElements) {
 
                 document.registerReact('cart-container', CartUI_Container);
-                __CartWidget.loadCart(__CartParams);
+                __CartWidget.initCart(__CartParams);
 
             }
 

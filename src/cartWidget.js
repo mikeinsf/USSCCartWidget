@@ -82,7 +82,7 @@ var __CartWidget = {
         // add inline CSS class to allow for variable cart widths
         var head = document.getElementsByTagName('head')[0];
         var style = document.createElement('style');
-        styleString = '#' + DOMId + ' .cart-box.visible { width: ' + this.settings.pxWidth + 'px; } ';
+        styleString = '.--cart-container .cart-box.visible { width: ' + this.settings.pxWidth + 'px; } ';
         style.innerHTML = styleString;
         head.appendChild(style);
         // load the cart CSS
@@ -93,18 +93,18 @@ var __CartWidget = {
         // append web component to DOM
         var cartContainer = document.createElement('cart-container');
         cartContainer.setAttribute('id', 'cartContainer');
-        cartContainer.className = 'cartContainer';
+        cartContainer.className = '--cart-container';
         document.getElementById(this.settings.DOMId).appendChild(cartContainer);
         cartContainer.forceUpdate();
     },
 
-    loadCart: function (c) {
+    initCart: function (c) {
         this.getSettings(c);
         if (this.ready) {
             this.setupPage();
             this.renderCart();
         } else {
-            alert('Unable to load cart.');
+            console.error('Unable to load cart.');
         }
     },
 

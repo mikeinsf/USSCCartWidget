@@ -2,16 +2,9 @@
 // this is wrapped inside a web component container
 
 var React = require('React');
-var classNames = require('classnames');
+var cx = require('classnames');
 
-// var CartUI = {
-//     render: function(containerId) {
-//         return React.render(
-//             <CartUI_Container />,
-//             document.getElementById(containerId)
-//         );
-//     },
-// }
+
 
 var CartUI_Container = React.createClass({displayName: "CartUI_Container",
     
@@ -51,8 +44,8 @@ var CartUI_Container = React.createClass({displayName: "CartUI_Container",
     render: function() {
         return (
             React.createElement("div", null, 
-                React.createElement("div", {className: classNames({'overlay': true, 'visible': this.state.isVisible}), onClick: this.onClick_overlay.bind(this)}), 
-                React.createElement("div", {className: classNames({'cart-box': true, 'visible': this.state.isVisible})}, 
+                React.createElement("div", {className: cx({'overlay': true, 'visible': this.state.isVisible}), onClick: this.onClick_overlay.bind(this)}), 
+                React.createElement("div", {className: cx({'cart-box': true, 'visible': this.state.isVisible})}, 
                     React.createElement("h2", null, "Your Cart"), 
                     React.createElement("button", {onClick: this.onClick_button.bind(this)}, "click"), 
                     React.createElement(CampList, {camps: this.state.camps})
@@ -79,33 +72,3 @@ var CampList = React.createClass({displayName: "CampList",
     }
 });
 
-
-// window.USSC.CampList = React.createClass({
-//     getInitialState: function() {
-//         return {
-//             color: '#000000'
-//         };
-//     },
-
-//     attributeChanged: function(name, oldValue, newValue) {
-//         console.log('Attribute ' + name + ' was changed from ' + oldValue + ' to ' + newValue);
-//     },
-
-//     render: function() {
-//         var rows = [];
-
-//         if (this.props.items === undefined) {
-//             return <div></div>;
-//         }
-
-//         this.props.items.forEach(function(item) {
-//             rows.push(<li key={item.text}>{item.text}</li>);
-//         });
-
-//         return <div>&lt;my-reactive-element&gt;<ul style={this.state}>{rows}</ul>&lt;/my-reactive-element&gt;</div>;
-//     },
-//     changeColor: function(color) {
-//         this.state.color = color;
-//         this.forceUpdate();
-//     }
-// });
