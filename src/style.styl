@@ -1,0 +1,35 @@
+
+#DIV__CART {
+    
+    .overlay {
+        position: absolute;
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: none;
+        background-color: rgba(255, 255, 255, .7);
+                 
+         &.visible {
+            display: inline;
+         }
+    }
+    
+    .cart-box {
+        width: 0;
+        z-index: 999999;
+        position: absolute;
+        transition: width .6s;
+        height: 100%;
+        right: 0;
+        top: 0;
+        background-color: #EEEEEE;
+        overflow-x: hidden;
+        
+    }
+    
+}
+
