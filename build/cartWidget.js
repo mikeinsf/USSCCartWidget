@@ -5,41 +5,32 @@ var __CartWidget = {
 
     errors: [],
 
-    defaultSettings: {
-        DOMId: 'DIV__CART',
-        pxWidth: 300,
+    settings: {
         sessionId: null,
-        host: null,
+        insertDomId: 'DIV__CART',
+        pxWidth: 300,
+        cartWidgetCss: '/style.css',
+        webServiceEndpoint: '/service1.asmx',
+        cartEndpoint: '/step1',
     },
-
-    settings: null,
-
-    CSSURI: {type: 'CSS', URI: __CartParams.baseUrl + 'style.css'},
     
-    getSettings: function(u) {
+    initSettings: function(u) {
 
         function isInt(n){
             return Number(n) === n && n % 1 === 0;
         }
      
-        var d = this.defaultSettings;
-        var s = {};
+        var s = this.settings;
 
         if (typeof(u) == 'object') {
-            if (!u.hasOwnProperty('baseUrl')) 
-                this.errors.push('Settings object __CartParams must have a value for "host".');
             if (!u.hasOwnProperty('sessionId')) 
                 this.errors.push('Settings object __CartParams must have a value for "sessionId".');
-            if (u.length < 5) 
-                this.errors.push('The sessionId must be a GUID.');
-            if (u.hasOwnProperty('DOMId')) {
-                if (document.getElementById(u.DOMId) == null) {
-                    this.errors.push('There is no element in your DOM with id="' + u.DOMId + '".');
+            if (u.hasOwnProperty('insertDomId')) {
+                if (document.getElementById(u.insertDomId) == null) {
+                    console.log('Cannot find user-specified DOM element id="' + u.insertDomId + '". Fix or omit setting for __CartParams.insertDomId to eliminate this warning. Using default DOM element id="' + d.insertDomId + '".');
                 } else {
-                    s.DOMId = u.DOMId;
+                    s.insertDomId = u.insertDomId;
                 }
-            } else {
-                s.DOMId = d.DOMId;
             }
             if (u.hasOwnProperty('pxWidth')) {
                 if (isInt(u.pxWidth)) {
@@ -52,15 +43,12 @@ var __CartWidget = {
                 } else {
                     this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Reverting to default value (' + d.pxWidth + ')');
                 }
-            } else {
-                s.pxWidth = d.pxWidth;
             }
         } else {
             this.errors.push('Failed to load settings for the cart. Create an object named __CartParams.');
         }
         if (this.errors.length == 0) {
             s.sessionId = u.sessionId;
-            s.baseUrl = u.baseUrl;
             this.settings = s;
             this.ready = true;
         } else {
@@ -69,6 +57,10 @@ var __CartWidget = {
             }
         }
         return this.ready;
+    },
+
+    goToCart: function () {
+        window.location.href = __CartParams.baseUrl + this.settings.cartEndpoint;
     },
 
     setupPage: function () {
@@ -85,8 +77,11 @@ var __CartWidget = {
         styleString = '.--cart-container .cart-box.visible { width: ' + this.settings.pxWidth + 'px; } ';
         style.innerHTML = styleString;
         head.appendChild(style);
+        
         // load the cart CSS
-        this.loadCSS(this.CSSURI);
+        var s = this.settings;
+        var cssUrl = __CartParams.baseUrl + s.cartWidgetCss;
+        this.loadCSS(cssUrl);
     },
 
     renderCart: function () {
@@ -99,7 +94,7 @@ var __CartWidget = {
     },
 
     initCart: function (c) {
-        this.getSettings(c);
+        this.initSettings(c);
         if (this.ready) {
             this.setupPage();
             this.renderCart();
@@ -108,7 +103,7 @@ var __CartWidget = {
         }
     },
 
-    loadCSS: function (fileDef) {
+    loadCSS: function (URI) {
 
         function loadResource(url, success) {
             var link = document.createElement('link');
@@ -122,17 +117,13 @@ var __CartWidget = {
             link.onload = link.onreadystatechange = function() {
                 if (!done || (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
                     done = true;
-                    console.log('successfully loaded ' + fileDef.URI);
+                    console.log('successfully loaded ' + URI);
                     success();
                     link.onload = link.onreadystatechange = null;
                 };
             };
             head.appendChild(link);
         };
-
-        var URI = fileDef.URI;
-        
-        console.log('loading ' + fileDef.type + ': ' + URI);
 
         loadResource(URI, function() {
             // console.log('callback for ' + URI);
