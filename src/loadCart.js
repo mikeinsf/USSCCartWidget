@@ -6,7 +6,7 @@
         function loadResource(url, success) {
             var script = document.createElement('script');
             script.src = url;
-            script.setAttribute('data-main', 'main.js');
+            script.setAttribute('data-main', 'http://localhost:8081/main.js');
             var head = document.getElementsByTagName('head')[0],
             done = false;
             
@@ -31,6 +31,6 @@
 
     }
 
-    loadJS('require.js', null);
+    loadJS('http://localhost:8081/require.js', null);
 
 })();

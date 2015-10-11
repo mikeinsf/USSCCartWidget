@@ -14,7 +14,7 @@ var __CartWidget = {
 
     settings: null,
 
-    CSSURI: {type: 'CSS', URI: '/style.css'},
+    CSSURI: {type: 'CSS', URI: 'http://localhost:8081/style.css'},
     
     getSettings: function(u) {
 

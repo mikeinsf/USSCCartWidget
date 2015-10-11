@@ -14,8 +14,8 @@ var CartUI_Container = React.createClass({displayName: "CartUI_Container",
         if (!this.props.container.toggleVisibility)
             this.props.container.toggleVisibility = this.toggleVisibility.bind(this);
 
-        if (!this.props.container.reloadCampList)
-            this.props.container.reloadCampList = this.reloadCampList.bind(this);
+        if (!this.props.container.loadCamps)
+            this.props.container.loadCamps = this.loadCamps.bind(this);
 
     },
 
@@ -25,7 +25,7 @@ var CartUI_Container = React.createClass({displayName: "CartUI_Container",
         };
     },
 
-    reloadCampList: function(camps) {
+    loadCamps: function(camps) {
         this.setState({camps: camps});
     },
 

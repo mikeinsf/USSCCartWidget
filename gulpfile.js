@@ -49,6 +49,12 @@ gulp.task('clean', [], function(callback) {
 
 gulp.task('connect', function() {
   connect.server({
+    port:           8080,
+    root:           './index',
+    livereload:     true
+  });
+  connect.server({
+    port:           8081,
     root:           './build',
     livereload:     true
   });
@@ -66,15 +72,19 @@ gulp.task('css', function() {
         .pipe(gulp.dest('./build'));
 });
 
-gulp.task('copy-assets', function() {
+gulp.task('copy-index', function() {
+    gulp.src('./src/**/*.html')
+        .pipe(gulp.dest('./index'));
+});
+
+gulp.task('copy-assets', ['copy-index'], function() {
     var js = './src/**/*.js';
     var dre = './node_modules/document-register-element/build/document-register-element.js';
     var ra = './node_modules/reactive-elements/dist/reactive-elements.js';
     var jq = './node_modules/jquery/dist/jquery.js';
     var react = './node_modules/react/dist/react.js';
     var jsxt = './node_modules/react/dist/JSXTransformer.js';
-    var html = './src/**/*.html';
-    var files = [].concat(js, html, ra, dre, jq, react, jsxt);
+    var files = [].concat(js, ra, dre, jq, react, jsxt);
     gulp.src(files)
     .pipe(gulp.dest('./build'));
 });
@@ -89,7 +99,7 @@ gulp.task('transpile-js', function() {
 gulp.task('recompile', ['css', 'copy-assets', 'transpile-js']);
 
 gulp.task('watch', ['css', 'copy-assets', 'transpile-js', 'connect'], function () {
-    gulp.watch(['./build/*']).on('change', livereload.changed);
+    gulp.watch(['./src/**/*.js', './src/**/*.jsx'],['clean', 'recompile']).on('change', livereload.changed);
 });
 
 gulp.task('default', ['clean', 'watch']);
