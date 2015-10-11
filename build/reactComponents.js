@@ -25,7 +25,7 @@ var CartUI_Container = React.createClass({displayName: "CartUI_Container",
         };
     },
 
-    loadCamps: function(camps) {
+    listCamps: function(camps) {
         this.setState({camps: camps});
     },
 
