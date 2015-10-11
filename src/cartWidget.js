@@ -14,7 +14,7 @@ var __CartWidget = {
 
     settings: null,
 
-    CSSURI: {type: 'CSS', URI: 'http://localhost:8081/style.css'},
+    CSSURI: {type: 'CSS', URI: __CartParams.baseUrl + 'style.css'},
     
     getSettings: function(u) {
 
@@ -26,7 +26,7 @@ var __CartWidget = {
         var s = {};
 
         if (typeof(u) == 'object') {
-            if (!u.hasOwnProperty('host')) 
+            if (!u.hasOwnProperty('baseUrl')) 
                 this.errors.push('Settings object __CartParams must have a value for "host".');
             if (!u.hasOwnProperty('sessionId')) 
                 this.errors.push('Settings object __CartParams must have a value for "sessionId".');
@@ -60,7 +60,7 @@ var __CartWidget = {
         }
         if (this.errors.length == 0) {
             s.sessionId = u.sessionId;
-            s.host = u.host;
+            s.baseUrl = u.baseUrl;
             this.settings = s;
             this.ready = true;
         } else {

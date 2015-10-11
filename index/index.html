@@ -9,10 +9,10 @@
         <script>
             var __CartParams = {}; 
             __CartParams.sessionId = '1234567890';
-            __CartParams.host = 'localhost:8081';
+            __CartParams.baseUrl = '//localhost:8081/';
             (function() {
                 var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
-                sc.src = '//' + __CartParams.host + '/loadCart.js';
+                sc.src = __CartParams.baseUrl + 'loadCart.js';
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
             })();
         </script>
@@ -45,7 +45,7 @@
 
     <body>
 
-        <h1>USSC Cart Widget Demo</h1>
+        <h1>USSC Cart Widget Demos</h1>
 
         <div class="half">
             

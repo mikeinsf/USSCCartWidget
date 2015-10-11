@@ -99,7 +99,7 @@ gulp.task('transpile-js', function() {
 gulp.task('recompile', ['css', 'copy-assets', 'transpile-js']);
 
 gulp.task('watch', ['css', 'copy-assets', 'transpile-js', 'connect'], function () {
-    gulp.watch(['./src/**/*.js', './src/**/*.jsx'],['clean', 'recompile']).on('change', livereload.changed);
+    gulp.watch(['./src/**/*.html', './src/**/*.js', './src/**/*.jsx'],['clean', 'recompile']).on('change', livereload.changed);
 });
 
 gulp.task('default', ['clean', 'watch']);

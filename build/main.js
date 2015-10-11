@@ -1,13 +1,13 @@
 require.config({
     paths: {
-        jquery: 'http://localhost:8081/jquery',
-        React: 'http://localhost:8081/react',
-        JSXTransformer: 'http://localhost:8081/JSXTransformer',
-        classnames: 'http://localhost:8081/classnames',
-        documentRegisterElement: 'http://localhost:8081/document-register-element',
-        reactComponents: 'http://localhost:8081/reactComponents',
-        cartWidget: 'http://localhost:8081/cartWidget',
-        reactiveElements: 'http://localhost:8081/reactive-elements',
+        jquery: __CartParams.baseUrl + 'jquery',
+        React: __CartParams.baseUrl + 'react',
+        JSXTransformer: __CartParams.baseUrl + 'JSXTransformer',
+        classnames: __CartParams.baseUrl + 'classnames',
+        documentRegisterElement: __CartParams.baseUrl + 'document-register-element',
+        reactComponents: __CartParams.baseUrl + 'reactComponents',
+        cartWidget: __CartParams.baseUrl + 'cartWidget',
+        reactiveElements: __CartParams.baseUrl + 'reactive-elements',
     },
 })
 
