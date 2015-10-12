@@ -62,9 +62,9 @@
 
                 <div><span>Enter it here:</span> <input type="text" name="campno" id="campno"/></div>
                 
-                <button onclick="console.log(__CartWidget.add(document.getElementById('campno'), true));">Add item to cart, show cart</button>
+                <button onclick="__CartWidget.add(document.getElementById('campno'));">Add item to cart, show cart</button>
                 
-                <button onclick="console.log(__CartWidget.delete(document.getElementById('campno'), true));">Delete item from cart, show cart</button>
+                <button onclick="__CartWidget.delete(document.getElementById('campno'));">Delete item from cart, show cart</button>
 
             </fieldset>
 
