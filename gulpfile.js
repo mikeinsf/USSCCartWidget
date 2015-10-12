@@ -79,13 +79,15 @@ gulp.task('copy-index', function() {
 });
 
 gulp.task('copy-assets', ['copy-index'], function() {
-    var js = './src/**/*.js';
-    var dre = './node_modules/document-register-element/build/document-register-element.js';
-    var ra = './node_modules/reactive-elements/dist/reactive-elements.js';
-    var jq = './node_modules/jquery/dist/jquery.js';
-    var react = './node_modules/react/dist/react.js';
-    var jsxt = './node_modules/react/dist/JSXTransformer.js';
-    var files = [].concat(js, ra, dre, jq, react, jsxt);
+    var files = [
+        './src/**/*.js',
+        './node_modules/document-register-element/build/document-register-element.js',
+        './node_modules/reactive-elements/dist/reactive-elements.js',
+        './node_modules/jquery/dist/jquery.js',
+        './node_modules/react/dist/react.js',
+        './node_modules/react/dist/JSXTransformer.js',
+        './node_modules/js-cookie/src/js.cookie.js',
+    ];
     gulp.src(files)
     .pipe(gulp.dest('./build'));
 });
@@ -112,7 +114,7 @@ gulp.task('lint', function () {
 gulp.task('recompile', ['css', 'copy-assets', 'transpile-js']);
 
 gulp.task('watch', ['css', 'copy-assets', 'transpile-js', 'connect'], function () {
-    gulp.watch(['./src/**/*.html', './src/**/*.js', './src/**/*.jsx'],['clean', 'recompile']).on('change', livereload.changed);
+    gulp.watch(['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.styl'],['clean', 'recompile']).on('change', livereload.changed);
 });
 
 gulp.task('default', ['clean', 'watch']);
