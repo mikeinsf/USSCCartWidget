@@ -19,8 +19,9 @@ var __CartWidget = {
 
     initSettings: function(u) {
 
-        function isInt(n){
-            return Number(n) === n && n % 1 === 0;
+        function isInt(str){
+            var n = ~~Number(str);
+            return String(n) === str && n >= 0;
         }
      
         var s = this.settings;
@@ -39,11 +40,7 @@ var __CartWidget = {
             }
             if (u.hasOwnProperty('pxWidth')) {
                 if (isInt(u.pxWidth)) {
-                    if (parseInt(u.pxWidth) > 0) {
-                        s.pxWidth = u.pxWidth;
-                    } else {
-                        this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Value must be a positive integer, or leave it blank for default width.');
-                    };
+                    s.pxWidth = u.pxWidth;
                 } else {
                     this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Value must be a positive integer, or leave it blank for default width.');
                 }
