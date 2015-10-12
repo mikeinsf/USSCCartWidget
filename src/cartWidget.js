@@ -5,9 +5,7 @@ var __CartWidget = {
     errors: [],
 
     settings: {
-        sessionId: null,
         insertDomId: 'DIV__CART',
-        pxWidth: 300,
         cartWidgetCss: '/style.css',
         webServiceEndpoint: '/service1.asmx',
         cartEndpoint: '/step1',
@@ -28,8 +26,10 @@ var __CartWidget = {
         var s = this.settings;
 
         if (typeof(u) == 'object') {
-            if (!u.hasOwnProperty('sessionId')) 
-                this.errors.push('Settings object __CartParams must have a value for "sessionId".');
+            if (!u.hasOwnProperty('hostSiteGuid')) 
+                this.errors.push('Settings object __CartParams must have a value for "hostSiteGuid".');
+            if (!u.hasOwnProperty('targetSiteGuid')) 
+                this.errors.push('Settings object __CartParams must have a value for "targetSiteGuid".');
             if (u.hasOwnProperty('insertDomId')) {
                 if (document.getElementById(u.insertDomId) == null) {
                     console.log('Cannot find user-specified DOM element id="' + u.insertDomId + '". Fix or omit setting for __CartParams.insertDomId to eliminate this warning. Using default DOM element id="' + d.insertDomId + '".');
@@ -42,18 +42,18 @@ var __CartWidget = {
                     if (parseInt(u.pxWidth) > 0) {
                         s.pxWidth = u.pxWidth;
                     } else {
-                        this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Reverting to default value (' + d.pxWidth + ')');
-                        s.pxWidth = d.pxWidth;
+                        this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Value must be a positive integer, or leave it blank for default width.');
                     };
                 } else {
-                    this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Reverting to default value (' + d.pxWidth + ')');
+                    this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Value must be a positive integer, or leave it blank for default width.');
                 }
             }
         } else {
             this.errors.push('Failed to load settings for the cart. Create an object named __CartParams.');
         }
         if (this.errors.length == 0) {
-            s.sessionId = u.sessionId;
+            s.hostSiteGuid = u.hostSiteGuid;
+            s.targetSiteGuid = u.targetSiteGuid;
             this.settings = s;
             this.ready = true;
         } else {
@@ -66,18 +66,13 @@ var __CartWidget = {
 
     setupPage: function () {
         var DOMId = this.settings.DOMId;
+
         // append the container div to the DOM
         if (document.getElementById(DOMId) == null) {
             var div = document.createElement('div');
             div.setAttribute('id', DOMId);
             document.getElementsByTagName('body')[0].appendChild(div);
         }
-        // add inline CSS class to allow for variable cart widths
-        var head = document.getElementsByTagName('head')[0];
-        var style = document.createElement('style');
-        styleString = '.--cart-container .cart-box.visible { width: ' + this.settings.pxWidth + 'px; } ';
-        style.innerHTML = styleString;
-        head.appendChild(style);
         
         // load the cart CSS
         var s = this.settings;
@@ -91,6 +86,7 @@ var __CartWidget = {
         cartContainer.setAttribute('id', 'cartContainer');
         cartContainer.className = '--cart-container';
         document.getElementById(this.settings.DOMId).appendChild(cartContainer);
+        if (this.settings.pxWidth) { this.setCartWidth(this.settings.pxWidth); }
         cartContainer.forceUpdate();
     },
 
@@ -138,6 +134,10 @@ var __CartWidget = {
     // interactions with reactComponents methods
     ////////////////////////
 
+    setCartWidth: function(width) {
+        document.getElementById('cartContainer').setWidth(width);
+    },
+    
     showCart: function() {
         document.getElementById('cartContainer').toggleVisibility(true);
     },
@@ -168,17 +168,25 @@ var __CartWidget = {
     ////////////////////////
 
     list: function () {
-        var data = {
+        var cartGuid = this.getCartGuid();
+        if (!cartGuid) {
+            alert('Error listing cart. Missing cartGuid cookie.');
+            return;
+        }
 
+        var data = {
+            m_cartguid : cartGuid,
+            m_hostsiteguid : __CartParams.hostSiteGuid,
+            m_targetsiteguid : __CartParams.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/list',
             data: JSON.stringify(data),
             success: function (msg) {
-                this.listSuccess(msg.camps);
+                __CartWidget.listSuccess(msg.camps);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                this.ajaxFailure(XMLHttpRequest.responseText);
+                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
             }
         });
         $.ajax(ajaxOpts);
@@ -186,21 +194,28 @@ var __CartWidget = {
 
     listSuccess: function (camps) {
         console.log('listing camps');
+        this.setCartGuid(msg.cartGuid);
         this.listCamps(camps);
     },
 
-    add: function () {
-        var data = {
+    add: function (classNo) {
+        var cartGuid = this.getCartGuid();
+        if (!cartGuid) cartGuid = '';
 
+        var data = {
+            m_cartguid : cartGuid,
+            m_classno : classNo,
+            m_hostsiteguid : __CartParams.hostSiteGuid,
+            m_targetsiteguid : __CartParams.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/add',
             data: JSON.stringify(data),
             success: function (msg) {
-                this.addSuccess(msg);
+                __CartWidget.addSuccess(msg);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                this.ajaxFailure(XMLHttpRequest.responseText);
+                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
             }
         });
         $.ajax(ajaxOpts);
@@ -208,21 +223,31 @@ var __CartWidget = {
 
     addSuccess: function (msg) {
         console.log('adding camp successful');
+        this.setCartGuid(msg.cartGuid);
         this.listCamps(msg.camps);
     },
 
-    delete: function () {
-        var data = {
+    delete: function (classNo) {
+        var cartGuid = this.getCartGuid();
+        if (!cartGuid) {
+            alert('Error deleting from cart. Missing cartGuid cookie.');
+            return;
+        }
 
+        var data = {
+            m_cartguid : cartGuid,
+            m_classno : classNo,
+            m_hostsiteguid : __CartParams.hostSiteGuid,
+            m_targetsiteguid : __CartParams.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/delete',
             data: JSON.stringify(data),
             success: function (msg) {
-                this.deleteSuccess(msg);
+                __CartWidget.deleteSuccess(msg);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                this.ajaxFailure(XMLHttpRequest.responseText);
+                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
             }
         });
         $.ajax(ajaxOpts);
@@ -230,21 +255,30 @@ var __CartWidget = {
 
     deleteSuccess: function (msg) {
         console.log('deleting camp successful');
+        this.setCartGuid(msg.cartGuid);
         this.listCamps(msg.camps);
     },
 
     clear: function () {
-        var data = {
+        var cartGuid = this.getCartGuid();
+        if (!cartGuid) {
+            alert('Error clearing cart. Missing cartGuid cookie.');
+            return;
+        }
 
+        var data = {
+            m_cartguid : cartGuid,
+            m_hostsiteguid : __CartParams.hostSiteGuid,
+            m_targetsiteguid : __CartParams.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/clear',
             data: JSON.stringify(data),
             success: function (msg) {
-                this.clearSuccess(msg);
+                __CartWidget.clearSuccess(msg);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                this.ajaxFailure(XMLHttpRequest.responseText);
+                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
             }
         });
         $.ajax(ajaxOpts);
@@ -252,7 +286,25 @@ var __CartWidget = {
 
     clearSuccess: function (msg) {
         console.log('clearing cart successful');
+        this.setCartGuid(msg.cartGuid);
         this.listCamps([]);
+    },
+
+
+
+    ////////////////////////
+    // cookie functions
+    ////////////////////////
+
+    getCartGuid: function() {
+        return cookie.get('cartGuid');
+    },
+
+    setCartGuid: function(value) {
+        cookie.set('cartGuid', value, {
+            expires: 1,
+            path: '/',
+        });
     },
 
 
