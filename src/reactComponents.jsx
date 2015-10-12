@@ -15,8 +15,8 @@ var CartUI_Container = React.createClass({
             this.props.container.toggleVisibility = this.toggleVisibility.bind(this);
         if (!this.props.container.listCamps)
             this.props.container.listCamps = this.listCamps.bind(this);
-        if (!this.props.container.setWidth)
-            this.props.container.setWidth = this.setWidth.bind(this);
+        if (!this.props.container.setState)
+            this.props.container.setState = this.setState.bind(this);
 
     },
 
@@ -24,11 +24,8 @@ var CartUI_Container = React.createClass({
         return {
             isVisible: false,
             pxWidth: '300',
+            baseUrl: '',
         };
-    },
-
-    setWidth: function (width) {
-        this.setState({pxWidth: width});
     },
 
     listCamps: function(camps) {

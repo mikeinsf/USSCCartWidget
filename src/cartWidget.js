@@ -27,6 +27,8 @@ var __CartWidget = {
         var s = this.settings;
 
         if (typeof(u) == 'object') {
+            if (!u.hasOwnProperty('baseUrl')) 
+                this.errors.push('Settings object __CartParams must have a value for "baseUrl".');
             if (!u.hasOwnProperty('hostSiteGuid')) 
                 this.errors.push('Settings object __CartParams must have a value for "hostSiteGuid".');
             if (!u.hasOwnProperty('targetSiteGuid')) 
@@ -49,6 +51,7 @@ var __CartWidget = {
             this.errors.push('Failed to load settings for the cart. Create an object named __CartParams.');
         }
         if (this.errors.length == 0) {
+            s.baseUrl = u.baseUrl;
             s.hostSiteGuid = u.hostSiteGuid;
             s.targetSiteGuid = u.targetSiteGuid;
             this.settings = s;
@@ -62,7 +65,8 @@ var __CartWidget = {
     },
 
     setupPage: function () {
-        var DOMId = this.settings.DOMId;
+        var s = this.settings;
+        var DOMId = s.DOMId;
 
         // append the container div to the DOM
         if (document.getElementById(DOMId) == null) {
@@ -72,8 +76,7 @@ var __CartWidget = {
         }
         
         // load the cart CSS
-        var s = this.settings;
-        var cssUrl = __CartParams.baseUrl + s.cartWidgetCss;
+        var cssUrl = s.baseUrl + s.cartWidgetCss;
         this.loadCSS(cssUrl);
     },
 
@@ -83,7 +86,7 @@ var __CartWidget = {
         cartContainer.setAttribute('id', 'cartContainer');
         cartContainer.className = '--cart-container';
         document.getElementById(this.settings.DOMId).appendChild(cartContainer);
-        if (this.settings.pxWidth) { this.setCartWidth(this.settings.pxWidth); }
+        this.setReactState();
         cartContainer.forceUpdate();
     },
 
@@ -131,10 +134,16 @@ var __CartWidget = {
     // interactions with reactComponents methods
     ////////////////////////
 
-    setCartWidth: function(width) {
-        document.getElementById('cartContainer').setWidth(width);
+    setReactState: function () {
+        var s = this.settings;
+        var initialState = {};
+        if (s.pxWidth) { 
+             initialState.pxWidth = s.pxWidth;
+        }
+        initialState.baseUrl = s.baseUrl;
+        document.getElementById('cartContainer').setState(initialState);
     },
-    
+
     showCart: function() {
         document.getElementById('cartContainer').toggleVisibility(true);
     },
@@ -155,7 +164,7 @@ var __CartWidget = {
     ////////////////////////
 
     goToCart: function () {
-        window.location.href = __CartParams.baseUrl + this.settings.cartEndpoint;
+        window.location.href = this.settings.baseUrl + this.settings.cartEndpoint;
     },
 
 
@@ -165,6 +174,7 @@ var __CartWidget = {
     ////////////////////////
 
     list: function () {
+        var s = this.settings;
         var cartGuid = this.getCartGuid();
         if (!cartGuid) {
             alert('Error listing cart. Missing cartGuid cookie.');
@@ -173,11 +183,11 @@ var __CartWidget = {
 
         var data = {
             m_cartguid : cartGuid,
-            m_hostsiteguid : __CartParams.hostSiteGuid,
-            m_targetsiteguid : __CartParams.targetSiteGuid,
+            m_hostsiteguid : s.hostSiteGuid,
+            m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/list',
+            url: s.baseUrl + s.webServiceEndpoint + '/list',
             data: JSON.stringify(data),
             success: function (msg) {
                 __CartWidget.listSuccess(msg.camps);
@@ -196,17 +206,18 @@ var __CartWidget = {
     },
 
     add: function (classNo) {
+        var s = this.settings;
         var cartGuid = this.getCartGuid();
         if (!cartGuid) cartGuid = '';
 
         var data = {
             m_cartguid : cartGuid,
             m_classno : classNo,
-            m_hostsiteguid : __CartParams.hostSiteGuid,
-            m_targetsiteguid : __CartParams.targetSiteGuid,
+            m_hostsiteguid : s.hostSiteGuid,
+            m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/add',
+            url: s.baseUrl + s.webServiceEndpoint + '/add',
             data: JSON.stringify(data),
             success: function (msg) {
                 __CartWidget.addSuccess(msg);
@@ -225,6 +236,7 @@ var __CartWidget = {
     },
 
     delete: function (classNo) {
+        var s = this.settings;
         var cartGuid = this.getCartGuid();
         if (!cartGuid) {
             alert('Error deleting from cart. Missing cartGuid cookie.');
@@ -234,11 +246,11 @@ var __CartWidget = {
         var data = {
             m_cartguid : cartGuid,
             m_classno : classNo,
-            m_hostsiteguid : __CartParams.hostSiteGuid,
-            m_targetsiteguid : __CartParams.targetSiteGuid,
+            m_hostsiteguid : s.hostSiteGuid,
+            m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/delete',
+            url: s.baseUrl + s.webServiceEndpoint + '/delete',
             data: JSON.stringify(data),
             success: function (msg) {
                 __CartWidget.deleteSuccess(msg);
@@ -257,6 +269,7 @@ var __CartWidget = {
     },
 
     clear: function () {
+        var s = this.settings;
         var cartGuid = this.getCartGuid();
         if (!cartGuid) {
             alert('Error clearing cart. Missing cartGuid cookie.');
@@ -265,11 +278,11 @@ var __CartWidget = {
 
         var data = {
             m_cartguid : cartGuid,
-            m_hostsiteguid : __CartParams.hostSiteGuid,
-            m_targetsiteguid : __CartParams.targetSiteGuid,
+            m_hostsiteguid : s.hostSiteGuid,
+            m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: __CartParams.baseUrl + this.settings.webServiceEndpoint + '/clear',
+            url: s.baseUrl + s.webServiceEndpoint + '/clear',
             data: JSON.stringify(data),
             success: function (msg) {
                 __CartWidget.clearSuccess(msg);
