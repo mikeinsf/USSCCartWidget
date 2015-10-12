@@ -11,7 +11,7 @@
                 hostSiteGuid    : 'eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico',
                 targetSiteGuid  : 'IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE',
                 baseUrl         : '//localhost:8081',
-                pxWidth         : '500', // optional. default is 300px
+                pxWidth         : '400', // optional. default is 300px
             }; 
             (function() {
                 var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
@@ -62,13 +62,10 @@
 
                 <div><span>Enter it here:</span> <input type="text" name="campno" id="campno"/></div>
                 
-                <button onclick="console.log(__CartWidget.addToCart(document.getElementById('campno'), true));">Add item to cart, show cart</button>
+                <button onclick="console.log(__CartWidget.add(document.getElementById('campno'), true));">Add item to cart, show cart</button>
                 
-                <button onclick="alert(__CartWidget.addToCart(document.getElementById('campno'), false));">Add item to cart, show alert</button>
-                
-                <button onclick="console.log(__CartWidget.removeFromCart(document.getElementById('campno'), true));">Add item to cart, show cart</button>
-                
-                <button onclick="alert(__CartWidget.removeFromCart(document.getElementById('campno'), false));">Add item to cart, show alert</button>
+                <button onclick="console.log(__CartWidget.delete(document.getElementById('campno'), true));">Delete item from cart, show cart</button>
+
             </fieldset>
 
             <button onclick="__CartWidget.goToCart();">Proceed to Checkout</button>
