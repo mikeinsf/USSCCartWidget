@@ -8,9 +8,9 @@ require.config({
         reactComponents: __CartParams.baseUrl + '/reactComponents',
         cartWidget: __CartParams.baseUrl + '/cartWidget',
         reactiveElements: __CartParams.baseUrl + '/reactive-elements',
+        cookie: __CartParams.baseUrl + '/js.cookie',
     },
 })
-
 
 require( ['jquery', 'React', 'JSXTransformer', 'classnames', 'documentRegisterElement'],
 
@@ -18,10 +18,11 @@ require( ['jquery', 'React', 'JSXTransformer', 'classnames', 'documentRegisterEl
 
         // window.React = React;
 
-        require(['reactComponents', 'cartWidget', 'reactiveElements'],
+        require(['reactComponents', 'cartWidget', 'reactiveElements', 'cookie'],
 
-            function(reactComponents, cartWidget, reactiveElements) {
+            function(reactComponents, cartWidget, reactiveElements, cookie) {
 
+                window.cookie = cookie;
                 document.registerReact('cart-container', CartUI_Container);
                 __CartWidget.initCart(__CartParams);
 
