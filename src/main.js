@@ -1,14 +1,14 @@
 require.config({
     paths: {
-        jquery: __CartParams.baseUrl + '/jquery',
-        React: __CartParams.baseUrl + '/react',
-        JSXTransformer: __CartParams.baseUrl + '/JSXTransformer',
-        classnames: __CartParams.baseUrl + '/classnames',
-        documentRegisterElement: __CartParams.baseUrl + '/document-register-element',
-        reactComponents: __CartParams.baseUrl + '/reactComponents',
-        cartWidget: __CartParams.baseUrl + '/cartWidget',
-        reactiveElements: __CartParams.baseUrl + '/reactive-elements',
-        cookie: __CartParams.baseUrl + '/js.cookie',
+        jquery: __CartParams.baseUrl + '/cart-widget/jquery',
+        React: __CartParams.baseUrl + '/cart-widget/react',
+        JSXTransformer: __CartParams.baseUrl + '/cart-widget/JSXTransformer',
+        classnames: __CartParams.baseUrl + '/cart-widget/classnames',
+        documentRegisterElement: __CartParams.baseUrl + '/cart-widget/document-register-element',
+        reactComponents: __CartParams.baseUrl + '/cart-widget/reactComponents',
+        cartWidget: __CartParams.baseUrl + '/cart-widget/cartWidget',
+        reactiveElements: __CartParams.baseUrl + '/cart-widget/reactive-elements',
+        cookie: __CartParams.baseUrl + '/cart-widget/js.cookie',
     },
 })
 

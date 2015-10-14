@@ -6,8 +6,8 @@ var __CartWidget = {
 
     settings: {
         insertDomId: 'DIV__CART',
-        cartWidgetCss: '/style.css',
-        webServiceEndpoint: '/service1.asmx',
+        cartWidgetFolder: '/cart-widget',
+        webServiceEndpoint: '/ws.asmx',
         cartEndpoint: '/step1',
     },
     
@@ -76,7 +76,7 @@ var __CartWidget = {
         }
         
         // load the cart CSS
-        var cssUrl = s.baseUrl + s.cartWidgetCss;
+        var cssUrl = s.baseUrl + s.cartWidgetFolder + '/style.css';
         this.loadCSS(cssUrl);
     },
 
@@ -145,7 +145,8 @@ var __CartWidget = {
     },
 
     showCart: function() {
-        document.getElementById('cartContainer').toggleVisibility(true);
+        this.list();
+        // document.getElementById('cartContainer').toggleVisibility(true);
     },
     
     hideCart: function() {
@@ -187,14 +188,15 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/list',
+            url: s.baseUrl + s.webServiceEndpoint + '/List',
             data: JSON.stringify(data),
             success: function (msg) {
-                __CartWidget.listSuccess(msg.camps);
+                if (msg.success) {
+                    __CartWidget.listSuccess(msg.camps);
+                } else {
+                    alert(msg.message);
+                }
             },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
-            }
         });
         $.ajax(ajaxOpts);
     },
@@ -217,14 +219,15 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/add',
-            data: JSON.stringify(data),
+            url: s.baseUrl + s.webServiceEndpoint + '/Add',
+            data: data,
             success: function (msg) {
-                __CartWidget.addSuccess(msg);
+                if (msg.success) {
+                    __CartWidget.addSuccess(msg);
+                } else {
+                    alert(msg.message);
+                }
             },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
-            }
         });
         $.ajax(ajaxOpts);
     },
@@ -250,14 +253,15 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/delete',
+            url: s.baseUrl + s.webServiceEndpoint + '/Delete',
             data: JSON.stringify(data),
             success: function (msg) {
-                __CartWidget.deleteSuccess(msg);
+                if (msg.success) {
+                    __CartWidget.deleteSuccess(msg);
+                } else {
+                    alert(msg.message);
+                }
             },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
-            }
         });
         $.ajax(ajaxOpts);
     },
@@ -282,14 +286,15 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/clear',
+            url: s.baseUrl + s.webServiceEndpoint + '/Clear',
             data: JSON.stringify(data),
             success: function (msg) {
-                __CartWidget.clearSuccess(msg);
+                if (msg.success) {
+                    __CartWidget.clearSuccess(msg);
+                } else {
+                    alert(msg.message);
+                }
             },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                __CartWidget.ajaxFailure(XMLHttpRequest.responseText);
-            }
         });
         $.ajax(ajaxOpts);
     },
@@ -307,7 +312,8 @@ var __CartWidget = {
     ////////////////////////
 
     getCartGuid: function() {
-        return cookie.get('cartGuid');
+        var cartGuid = cookie.get('cartGuid');
+        return (cartGuid) ? cartGuid : '0';
     },
 
     setCartGuid: function(value) {
@@ -333,20 +339,6 @@ var __CartWidget = {
         return keynames;
     },
 
-    ajaxFailure: function (msg) {
-        try {
-            var errstr = '';
-            var errs = $.parseJSON(msg);
-            var keynames = this.getKeyNames(errs);
-            for (var i = 0; i < keynames.length; i++) {
-                errstr += errs[keynames[i]];
-            }
-            alert(errstr);
-        } catch (e1) {
-            alert(msg);
-        }
-    },
-
 }
 
 
@@ -358,13 +350,7 @@ var __CartWidget = {
 var ajaxDefaults = {};
 
 ajaxDefaults.base = {
-    type: "POST",
     timeout: 100000,
-    dataFilter: function (data) {
-        //see http://encosia.com/2009/06/29/never-worry-about-asp-net-ajaxs-d-again/ 
-        data = JSON.parse(data); //use the JSON2 library if you aren’t using FF3+, IE8, Safari 3/Google Chrome 
-        return data.hasOwnProperty("d") ? data.d : data;
-    },
     error: function (xhr) {
         //see 
         if (!xhr) return;
@@ -380,5 +366,5 @@ ajaxDefaults.base = {
 ajaxDefaults.json = $.extend(ajaxDefaults.base, {
     //see http://encosia.com/2008/03/27/using-jquery-to-consume-aspnet-json-web-services/ 
     contentType: "application/json; charset=utf-8",
-    dataType: "json"
+    dataType: "jsonp"
 });
