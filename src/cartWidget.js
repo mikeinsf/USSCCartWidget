@@ -146,11 +146,10 @@ var __CartWidget = {
 
     showCart: function() {
         this.list();
-        // document.getElementById('cartContainer').toggleVisibility(true);
     },
     
     hideCart: function() {
-        document.getElementById('cartContainer').toggleVisibility(false);
+        document.getElementById('cartContainer').toggleVis(false);
     },
 
     listCamps: function (camps) {
@@ -189,10 +188,10 @@ var __CartWidget = {
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: s.baseUrl + s.webServiceEndpoint + '/List',
-            data: JSON.stringify(data),
+            data: data,
             success: function (msg) {
                 if (msg.success) {
-                    __CartWidget.listSuccess(msg.camps);
+                    __CartWidget.listSuccess(msg);
                 } else {
                     alert(msg.message);
                 }
@@ -201,10 +200,10 @@ var __CartWidget = {
         $.ajax(ajaxOpts);
     },
 
-    listSuccess: function (camps) {
+    listSuccess: function (msg) {
         console.log('listing camps');
         this.setCartGuid(msg.cartGuid);
-        this.listCamps(camps);
+        this.listCamps(msg.camps);
     },
 
     add: function (classNo) {
@@ -254,7 +253,7 @@ var __CartWidget = {
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: s.baseUrl + s.webServiceEndpoint + '/Delete',
-            data: JSON.stringify(data),
+            data: data,
             success: function (msg) {
                 if (msg.success) {
                     __CartWidget.deleteSuccess(msg);
@@ -287,7 +286,7 @@ var __CartWidget = {
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
             url: s.baseUrl + s.webServiceEndpoint + '/Clear',
-            data: JSON.stringify(data),
+            data: data,
             success: function (msg) {
                 if (msg.success) {
                     __CartWidget.clearSuccess(msg);
