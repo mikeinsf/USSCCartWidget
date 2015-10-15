@@ -40,11 +40,6 @@ var CartUI_Container = React.createClass({
         __CartWidget.goToCart();
     },
 
-    onClick_delete: function(event) {
-        var classNo = $(event.target).data('classno');
-        __CartWidget.delete(classNo);
-    },
-
     render: function() {
         var width;
         if (this.state.isVisible) {
