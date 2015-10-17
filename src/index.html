@@ -74,18 +74,16 @@
             var __CartParams = {
                 targetSiteGuid  : 'eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico',       // required
                 hostSiteGuid    : 'IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE',       // required
-                baseUrl         : '//localhost:60722',                                                      // required
-                loadScript      : '/cart-widget/loadCart.js',                                               // required
+                path            : ['//localhost:55062', '/cartwidget'],                                     // required
+                loadScript      : '/loadCart.js',                                                           // required
                 pxWidth         : '400',                                                                    // optional. default is 300px
             }; 
             (function() {
                 var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
-                sc.src = __CartParams.baseUrl + __CartParams.loadScript;
+                sc.src = __CartParams.path[0] + __CartParams.path[1] + __CartParams.loadScript;
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
             })();
         </script>
-        
-        <!--<script src="//localhost:60722/cart-widget/require.js" data-main="//localhost:60722/cart-widget/main.js"></script>-->
 
     </body>
 

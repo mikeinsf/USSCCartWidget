@@ -45,7 +45,7 @@ var size = require('gulp-size');
 // SEE https://github.com/PixelsCommander/ReactiveElements/blob/master/demo/index.html
 
 gulp.task('clean', [], function(callback) {
-    del(['./build/*'], callback);
+    del(['./build/*', '../USSC_CartWS/USSC_CartWS/cart-widget/*'], callback);
 });
 
 gulp.task('connect', function() {
@@ -70,7 +70,9 @@ gulp.task('css', function() {
         .pipe(sourcemaps.init())
         .pipe(stylus())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('build'))
+        .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
+        .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
 });
 
 gulp.task('copy-index', function() {
@@ -89,21 +91,17 @@ gulp.task('copy-assets', ['copy-index'], function() {
         './node_modules/js-cookie/src/js.cookie.js',
     ];
     gulp.src(files)
-    .pipe(gulp.dest('./build'));
-});
-
-gulp.task('lt', function() {
-    var files = [
-        './build/*.*'
-    ];
-    gulp.src(files)
-    .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'));
+    .pipe(gulp.dest('build'))
+    .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
+    .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
 });
 
 gulp.task('transpile-js', function() {
     return gulp.src('./src/**/*.jsx')
     .pipe(react({harmony: true}))
-    .pipe(gulp.dest('./build'))
+    .pipe(gulp.dest('build'))
+    .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
+    .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
 })
 
 gulp.task('lint', function () {
@@ -119,9 +117,11 @@ gulp.task('lint', function () {
         .pipe(eslint.failOnError());
 });
 
-gulp.task('recompile', ['css', 'copy-assets', 'transpile-js']);
+gulp.task('recompile', ['css', 'copy-assets', 'transpile-js'], function () {
 
-gulp.task('watch', ['css', 'copy-assets', 'transpile-js', 'connect', 'lt'], function () {
+});
+
+gulp.task('watch', ['css', 'copy-assets', 'transpile-js', 'connect'], function () {
     gulp.watch(['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.styl'],['clean', 'recompile']).on('change', livereload.changed);
 });
 

@@ -1,12 +1,14 @@
 
 (function() {
 
+    var scriptPath = __CartParams.path[0] + __CartParams.path[1];
+
     function loadJS (URI, success) {
 
         function loadResource(url, success) {
             var script = document.createElement('script');
             script.src = url;
-            script.setAttribute('data-main', __CartParams.baseUrl + '/cart-widget/main.js');
+            script.setAttribute('data-main', scriptPath + '/main.js');
             var head = document.getElementsByTagName('head')[0],
             done = false;
             
@@ -34,7 +36,7 @@
     // opted for jquery method of loading requirejs because IE (surprise surprise) does not like dynamic setting of non-standard tag attributes like "data-main"
     // this requires that jquery library MUST BE LOADED FIRST
     $(document).ready(function(){
-        $('head').append('<script src="' + __CartParams.baseUrl + '/cart-widget/require.js" data-main="' + __CartParams.baseUrl + '/cart-widget/main.js"></script>');
+        $('head').append('<script src="' + scriptPath + '/require.js" data-main="' + scriptPath + '/main.js"></script>');
     });
 
     // this is commented out bc IE is terrible

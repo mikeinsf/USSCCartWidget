@@ -6,9 +6,8 @@ var __CartWidget = {
 
     settings: {
         insertDomId: 'DIV__CART',
-        cartWidgetFolder: '/cart-widget',
         webServiceEndpoint: '/ws.asmx',
-        cartEndpoint: '/step1',
+        cartEndpoint: '/init.aspx',
     },
     
 
@@ -27,8 +26,8 @@ var __CartWidget = {
         var s = this.settings;
 
         if (typeof(u) == 'object') {
-            if (!u.hasOwnProperty('baseUrl')) 
-                this.errors.push('Settings object __CartParams must have a value for "baseUrl".');
+            if (!u.hasOwnProperty('path')) 
+                this.errors.push('Settings object __CartParams must have a value for "path".');
             if (!u.hasOwnProperty('hostSiteGuid')) 
                 this.errors.push('Settings object __CartParams must have a value for "hostSiteGuid".');
             if (!u.hasOwnProperty('targetSiteGuid')) 
@@ -51,7 +50,8 @@ var __CartWidget = {
             this.errors.push('Failed to load settings for the cart. Create an object named __CartParams.');
         }
         if (this.errors.length == 0) {
-            s.baseUrl = u.baseUrl;
+            s.path = u.path;
+            s.cartFolder = u.cartFolder;
             s.hostSiteGuid = u.hostSiteGuid;
             s.targetSiteGuid = u.targetSiteGuid;
             this.settings = s;
@@ -76,7 +76,7 @@ var __CartWidget = {
         }
         
         // load the cart CSS
-        var cssUrl = s.baseUrl + s.cartWidgetFolder + '/style.css';
+        var cssUrl = s.path[0] + s.path[1] + '/style.css';
         this.loadCSS(cssUrl);
     },
 
@@ -140,7 +140,7 @@ var __CartWidget = {
         if (s.pxWidth) { 
              initialState.pxWidth = s.pxWidth;
         }
-        initialState.baseUrl = s.baseUrl;
+        initialState.baseUrl = s.path[0];
         document.getElementById('cartContainer').setState(initialState);
     },
 
@@ -164,7 +164,7 @@ var __CartWidget = {
     ////////////////////////
 
     goToCart: function () {
-        window.location.href = this.settings.baseUrl + this.settings.cartEndpoint;
+        window.location.href = this.settings.path[0] + this.settings.cartEndpoint;
     },
 
 
@@ -187,7 +187,7 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/List',
+            url: s.path[0] + s.path[1] + s.webServiceEndpoint + '/List',
             data: data,
             success: function (msg) {
                 if (msg.success) {
@@ -218,7 +218,7 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/Add',
+            url: s.path[0] + s.path[1] + s.webServiceEndpoint + '/Add',
             data: data,
             success: function (msg) {
                 if (msg.success) {
@@ -252,7 +252,7 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/Delete',
+            url: s.path[0] + s.path[1] + s.webServiceEndpoint + '/Delete',
             data: data,
             success: function (msg) {
                 if (msg.success) {
@@ -285,7 +285,7 @@ var __CartWidget = {
             m_targetsiteguid : s.targetSiteGuid,
         };
         var ajaxOpts = $.extend(ajaxDefaults.json, {
-            url: s.baseUrl + s.webServiceEndpoint + '/Clear',
+            url: s.path[0] + s.path[1] + s.webServiceEndpoint + '/Clear',
             data: data,
             success: function (msg) {
                 if (msg.success) {
@@ -316,10 +316,14 @@ var __CartWidget = {
     },
 
     setCartGuid: function(value) {
-        cookie.set('cartGuid', value, {
-            expires: 1,
-            path: '/',
-        });
+        if (value=='0' || value == 'null' || value == null) {
+            cookie.remove('cartGuid');
+        } else {
+            cookie.set('cartGuid', value, {
+                expires: 30,
+                path: '/',
+            });
+        }
     },
 
 
