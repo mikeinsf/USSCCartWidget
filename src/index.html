@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="optisite.css">
         <style>
             body {
                 padding-left: 30px;
@@ -26,9 +27,10 @@
             input {
                 width: 100px;
             }
-            .half {
+            .third {
                 float: left;
                 width: 400px;
+                padding: 10px;
             }
         </style>
     </head>
@@ -37,11 +39,11 @@
 
         <h1>USSC Cart Widget Demos</h1>
 
-        <div class="half">
+        <div class="third">
             
-            <button onclick="__CartWidget.showCart();">Show the cart widget</button>
+            <button onclick="__CartWidget.showWidget();">Show the cart widget</button>
 
-            <button onclick="__CartWidget.hideCart();">Hide the cart widget</button>
+            <button onclick="__CartWidget.hideWidget();">Hide the cart widget</button>
             
             <fieldset>
                 
@@ -59,28 +61,43 @@
 
         </div>
 
-        <div class="half">
+        <div class="third">
             <h4>Steps to integrate:</h4>
             <ol>
-                <li>Include the script tag above inside the <b>&lt;head&gt;</b> tag of the page to include the cart widget.</li>
-                <li>
-                    Insert the proper value for the USSC_sessionid as a string var. This value should be a GUID. It will be used to uniquely identify what cart to load when the user lands at the full cart page.
+                <li style="color:red;">This sample page must be run over an HTTP server, not from the file system! The dependent scripts will not load properly if loading from the file system. Likewise with any other integration testbed. HTTP or HTTPS only.</li>
+                <li>Insert the entire script tag anywhere in your template</li>
+                <li>Set the width of the cart widget tray as you'd like it to appear. If you omit this, it will default to 470px wide.</li>
+                <li>NOTE: Each individual site will get unique targetSiteGuid, hostSiteGuid, and path values !! Be sure to set these correctly when we migrate to other environments.</li>
+                <li>The methods available to you are:
+                    <ul>
+                        <li>__CartWidget.showWidget()</li>
+                        <li>__CartWidget.hideWidget()</li>
+                        <li>__CartWidget.add()</li>
+                        <li>__CartWidget.delete()</li>
+                        <li>__CartWidget.goToCart()</li>
+                    </ul>
+                    <p>The methods I see you most likely using are add(), goToCart() and showWidget(). hideWidget() and delete() are taken care of in my script functionality.</p>
                 </li>
             </ol>
         </div>
 
+        <div class="third">
+            <h4>Optisite ToDos:</h4>
+            <p>Use this sample page to help you wire up the methods to your template as you need.</p>
+            <p>The cart widget has almost no CSS applied to it yet. I'm relying on Optisite to look at the fields available, and get back to me with an HTML snippet for how you'd like the listing of cart items to appear, and any other cart widget content. If you can supply production-ready HTML with correct CSS classes applied, that would be best! Remember that since this widget will load on your page, that your CSS style sheets will apply to it. You can define the HTML inside of div.cart-box-fix pretty much however you'd like. Note that the data-reactid attributes will be part of the final code output, but this should not get in  your way. </p>
+        </div>
+
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-        <script>
+        <script id="cartWidgetScript">
             var __CartParams = {
                 targetSiteGuid  : 'eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico',       // required
                 hostSiteGuid    : 'IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE',       // required
-                path            : ['//localhost:55062', '/cartwidget'],                                     // required
-                loadScript      : '/loadCart.js',                                                           // required
-                pxWidth         : '400',                                                                    // optional. default is 300px
+                path            : ['//securetest.ussportscamps.com', '/cartwidget', '/loadCart.js'],        // required
+                pxWidth         : '700',                                                                    // optional. default is 300px
             }; 
             (function() {
                 var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
-                sc.src = __CartParams.path[0] + __CartParams.path[1] + __CartParams.loadScript;
+                sc.src = __CartParams.path[0] + __CartParams.path[1] + __CartParams.path[2];
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
             })();
         </script>

@@ -27,10 +27,19 @@
         top: 0;
         background-color: #EEEEEE;
         overflow: hidden;
+
+        .cart-box-fix {
+            overflow: hidden;
+        }
+
+        .checkout-button {
+            margin: 10px 0;
+        }
         
         .camp-list {
             float: left;
             clear: both;
+            padding: 0 20px;
             
             li {
                 clear: both;
@@ -38,6 +47,31 @@
             }
         }
         
+    }
+
+    .camp-list-item {
+        float: left;
+        margin: 10px 0;
+        font-size: 12px;
+
+        .lbl {
+            font-weight: bold;
+        }
+
+        .camp-name {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        .camp-delete {
+            clear: both;
+            float: left;
+            width: 100%;
+        }
+
+        .delete-button {
+            margin: 8px 0;
+        }
     }
     
 }

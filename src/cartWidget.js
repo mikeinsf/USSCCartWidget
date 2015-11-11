@@ -7,7 +7,9 @@ var __CartWidget = {
     settings: {
         insertDomId: 'DIV__CART',
         webServiceEndpoint: '/ws.asmx',
-        cartEndpoint: '/init.aspx',
+        cartEndpoint: '/responsive/init.aspx',
+        cookieTTL: 30,                              // in days
+        pxWidth: 470,                               // default px width of cart tray
     },
     
 
@@ -66,7 +68,7 @@ var __CartWidget = {
 
     setupPage: function () {
         var s = this.settings;
-        var DOMId = s.DOMId;
+        var DOMId = s.insertDomId;
 
         // append the container div to the DOM
         if (document.getElementById(DOMId) == null) {
@@ -78,20 +80,30 @@ var __CartWidget = {
         // load the cart CSS
         var cssUrl = s.path[0] + s.path[1] + '/style.css';
         this.loadCSS(cssUrl);
+
+            var div = document.createElement('div');
+            div.setAttribute('id', 'divTest');
+            document.getElementsByTagName('body')[0].appendChild(div);
+
     },
 
     renderCart: function () {
+        var s = this.settings;
+        var DOMId = s.insertDomId;
+
         // append web component to DOM
-        var cartContainer = document.createElement('cart-container');
+        var cartContainer = document.createElement('div');
         cartContainer.setAttribute('id', 'cartContainer');
         cartContainer.className = '--cart-container';
-        document.getElementById(this.settings.DOMId).appendChild(cartContainer);
-        this.setReactState();
-        cartContainer.forceUpdate();
+        document.getElementById(DOMId).appendChild(cartContainer);
+        React.render(
+            React.createElement(CartUI_Container, {camps: null, isVisible: false, pxWidth: s.pxWidth}, null),
+            document.getElementById('cartContainer')
+        );
     },
 
-    initCart: function (c) {
-        this.initSettings(c);
+    initCart: function () {
+        this.initSettings(__CartParams);
         if (this.ready) {
             this.setupPage();
             this.renderCart();
@@ -134,27 +146,23 @@ var __CartWidget = {
     // interactions with reactComponents methods
     ////////////////////////
 
-    setReactState: function () {
-        var s = this.settings;
-        var initialState = {};
-        if (s.pxWidth) { 
-             initialState.pxWidth = s.pxWidth;
-        }
-        initialState.baseUrl = s.path[0];
-        document.getElementById('cartContainer').setState(initialState);
-    },
-
-    showCart: function() {
+    showWidget: function() {
         this.list();
     },
     
-    hideCart: function() {
-        document.getElementById('cartContainer').toggleVis(false);
+    hideWidget: function() {
+        React.render(
+            React.createElement(CartUI_Container, {camps: null, isVisible: false, pxWidth: this.settings.pxWidth}, null),
+            document.getElementById('cartContainer')
+        );
     },
 
     listCamps: function (camps) {
         // camps is an array of camp objects
-        document.getElementById('cartContainer').listCamps(camps);
+        React.render(
+            React.createElement(CartUI_Container, {camps: camps, isVisible: true, pxWidth: this.settings.pxWidth}, null),
+            document.getElementById('cartContainer')
+        );
     },
 
 
@@ -164,7 +172,9 @@ var __CartWidget = {
     ////////////////////////
 
     goToCart: function () {
-        window.location.href = this.settings.path[0] + this.settings.cartEndpoint;
+        var cartGuid = this.getCartGuid();
+        var path = this.settings.path[0] + this.settings.cartEndpoint + '?cartGuid=' + cartGuid;
+        window.location.href = path;
     },
 
 
@@ -320,7 +330,7 @@ var __CartWidget = {
             cookie.remove('cartGuid');
         } else {
             cookie.set('cartGuid', value, {
-                expires: 30,
+                expires: this.settings.cookieTTL,
                 path: '/',
             });
         }

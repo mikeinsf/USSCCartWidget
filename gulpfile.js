@@ -76,18 +76,15 @@ gulp.task('css', function() {
 });
 
 gulp.task('copy-index', function() {
-    gulp.src('./src/**/*.html')
-        .pipe(gulp.dest('./index'));
+    gulp.src('./src/**/*.html').pipe(gulp.dest('./index'));
+    gulp.src('./src/optisite.css').pipe(gulp.dest('./index'));
 });
 
 gulp.task('copy-assets', ['copy-index'], function() {
     var files = [
         './src/**/*.js',
-        './node_modules/document-register-element/build/document-register-element.js',
-        './node_modules/reactive-elements/dist/reactive-elements.js',
         './node_modules/jquery/dist/jquery.js',
         './node_modules/react/dist/react.js',
-        './node_modules/react/dist/JSXTransformer.js',
         './node_modules/js-cookie/src/js.cookie.js',
     ];
     gulp.src(files)

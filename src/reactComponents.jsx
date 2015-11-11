@@ -8,32 +8,8 @@ var cx = require('classnames');
 
 var CartUI_Container = React.createClass({
     
-    getInitialState: function() {
-        return {
-            isVisible: false,
-            pxWidth: '300',
-            baseUrl: '',
-        };
-    },
-
-    componentDidMount: function() {
-        // expose methods to the web component wrapper
-        if (!this.props.container.toggleVis)    this.props.container.toggleVis      = this.toggleVis;
-        if (!this.props.container.listCamps)    this.props.container.listCamps      = this.listCamps;
-        if (!this.props.container.setState)     this.props.container.setState       = this.setState;
-    },
-
-    listCamps: function(camps) {
-        this.setState({camps: camps});
-        this.toggleVis(true);
-    },
-
-    toggleVis: function(isVisible) {
-        this.setState({isVisible: isVisible});
-    },
-
     onClick_overlay: function(event) {
-        this.toggleVis(false);
+        __CartWidget.hideWidget();
     },
 
     onClick_checkout: function(event) {
@@ -42,12 +18,33 @@ var CartUI_Container = React.createClass({
 
     render: function() {
         var width;
-        if (this.state.isVisible) {
-            width = this.state.pxWidth + 'px';
+        if (this.props.isVisible) {
+            width = this.props.pxWidth + 'px';
         } else {
             width = '0';
         }
 
+        return (
+            <div>
+                <div className={cx({'overlay': true, 'visible': this.props.isVisible})} onClick={this.onClick_overlay} />
+                <div className="cart-box" style={{width: width}} >
+                    <div className="cart-box-fix" style={{width: this.props.pxWidth + 'px'}}>
+                        <h2>Your Cart</h2>
+                        <div><button onClick={this.onClick_checkout}>Proceed to Checkout</button></div>
+                        <div className="camp-list"><CampList camps={this.props.camps} /></div>
+                        <div><button onClick={this.onClick_checkout}>Proceed to Checkout</button></div>
+                    </div>
+                </div>
+            </div>
+        );
+    },
+
+});
+
+
+var CampList = React.createClass({
+
+        // --- available fields
         // public string classNo;
         // public string sportName;
         // public string sportDescription;
@@ -57,26 +54,6 @@ var CartUI_Container = React.createClass({
         // public string state;
         // public string begins;
         // public string ends;
-
-        return (
-            <div>
-                <div className={cx({'overlay': true, 'visible': this.state.isVisible})} onClick={this.onClick_overlay} />
-                <div className="cart-box" style={{width: width}} >
-                    <div style={{width: this.state.pxWidth + 'px', overflow: 'hidden'}}>
-                        <h2>Your Cart</h2>
-                        <div><button onClick={this.onClick_checkout}>Proceed to Checkout</button></div>
-                        <div className="camp-list"><CampList camps={this.state.camps} /></div>
-                        <div><button onClick={this.onClick_checkout}>Proceed to Checkout</button></div>
-                    </div>
-                </div>
-            </div>
-        );
-
-    },
-
-});
-
-var CampList = React.createClass({
 
     onClick_delete: function(event) {
         var classNo = $(event.target).data('classno');
@@ -94,17 +71,21 @@ var CampList = React.createClass({
             var camp = this.props.camps[i];
             console.log(camp);
             campRows.push(
-                <li key={camp.classNo}>
-                <div>{camp.sportName}</div>
-                <div>{camp.campName}</div>
-                <div>{camp.city}, {camp.state}</div>
-                <div>{camp.begins} to {camp.ends}</div>
-                <div><button data-classno={camp.classNo} onClick={this.onClick_delete}>delete</button></div>
-                </li>
+                <div className="camp-list-item" key={camp.classNo}>
+                    <div><span className="lbl">className:</span> <span className="className">{camp.className}</span></div>
+                    <div><span className="lbl">classDescription:</span> <span className="classDescription">{camp.classDescription}</span></div>
+                    <div><span className="lbl">sportName:</span> <span className="sportName">{camp.sportName}</span></div>
+                    <div><span className="lbl">sportDescription:</span> <span className="sportDescription">{camp.sportDescription}</span></div>
+                    <div><span className="lbl">city:</span> <span className="city">{camp.city}</span></div>
+                    <div><span className="lbl">state:</span> <span className="state">{camp.state}</span></div>
+                    <div><span className="lbl">begins:</span> <span className="begins">{camp.begins}</span></div>
+                    <div><span className="lbl">ends:</span> <span className="ends">{camp.ends}</span></div>
+                    <div className="camp-delete"><button data-classno={camp.classNo} onClick={this.onClick_delete} className="delete-button mini-button">remove this camp</button></div>
+                </div>
             );
         }
 
-        return <div><ul>{campRows}</ul></div>;
+        return <div>{campRows}</div>;
     }
 });
 
