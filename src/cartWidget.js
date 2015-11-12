@@ -7,7 +7,8 @@ var __CartWidget = {
     settings: {
         insertDomId: 'DIV__CART',
         webServiceEndpoint: '/ws.asmx',
-        cartEndpoint: '/responsive/init.aspx',
+        cartEndpointX: '/responive/init.aspx?cartGuid=',
+        cartEndpoint: '/init/',
         cookieTTL: 30,                              // in days
         pxWidth: 470,                               // default px width of cart tray
     },

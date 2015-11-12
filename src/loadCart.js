@@ -1,8 +1,6 @@
 
 (function() {
 
-    var scriptPath = __CartParams.path[0] + __CartParams.path[1];
-
     function loadJS (URI, success) {
 
         function loadResource(url, success) {
@@ -32,6 +30,8 @@
         loadResource(URI, success);
 
     }
+
+    var scriptPath = __CartParams.path[0] + __CartParams.path[1];
 
     // opted for jquery method of loading requirejs because IE (surprise surprise) does not like dynamic setting of non-standard tag attributes like "data-main"
     // this requires that jquery library MUST BE LOADED FIRST
