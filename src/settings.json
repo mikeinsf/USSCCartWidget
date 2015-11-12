@@ -1,0 +1,11 @@
+{
+    "us": {
+
+    },
+
+	"us_test": {
+		"targetSiteGuid"  : "eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico",      
+		"hostSiteGuid"    : "IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE",       
+		"path"            : ["//securetest.ussportscamps.com", "/cartwidget", "/loadCart.js"]        
+	}
+}
