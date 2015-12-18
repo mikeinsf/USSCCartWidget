@@ -1,4 +1,10 @@
 {
+	"localhost": {
+		"targetSiteGuid"  : "eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico",      
+		"hostSiteGuid"    : "IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE",       
+		"path"            : ["//localhost:55062", "/cartwidget", "/loadCart.js"]        
+	},
+
     "us": {
 
     },

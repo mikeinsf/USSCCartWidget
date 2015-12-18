@@ -87,13 +87,14 @@
             <p>The cart widget has almost no CSS applied to it yet. I'm relying on Optisite to look at the fields available, and get back to me with an HTML snippet for how you'd like the listing of cart items to appear, and any other cart widget content. If you can supply production-ready HTML with correct CSS classes applied, that would be best! Remember that since this widget will load on your page, that your CSS style sheets will apply to it. You can define the HTML inside of div.cart-box-fix pretty much however you'd like. Note that the data-reactid attributes will be part of the final code output, but this should not get in  your way. </p>
         </div>
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script id="cartWidgetScript">
             var __CartParams = {
                 targetSiteGuid  : 'eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico',       // required
                 hostSiteGuid    : 'IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE',       // required
-                path            : ['//securetest.ussportscamps.com', '/cartwidget', '/loadCart.js'],        // required
-                pxWidth         : '700',                                                                    // optional. default is 300px
+                _path           : ['//securetest.ussportscamps.com', '/cartwidget', '/loadCart.js'],        // required
+                path            : ['//localhost:55062', '/cartwidget', '/loadCart.js'],        // required
+                pxWidth         : '300',                                                                    // optional. default is 300px
             }; 
             (function() {
                 var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
@@ -101,6 +102,17 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
             })();
         </script>
+
+        <script type="text/javascript">
+                var google_conversion_id = 945075756;
+                var google_conversion_language = "en";
+                var google_conversion_format = "3";
+                var google_conversion_color = "ffffff";
+                var google_conversion_label = "DCe3CNCO4WEQrOzSwgM";
+                var google_remarketing_only = false;
+        </script>
+        <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+
 
     </body>
 

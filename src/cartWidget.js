@@ -7,8 +7,8 @@ var __CartWidget = {
     settings: {
         insertDomId: 'DIV__CART',
         webServiceEndpoint: '/ws.asmx',
-        cartEndpointX: '/responive/init.aspx?cartGuid=',
-        cartEndpoint: '/init/',
+        cartEndpoint: '/responsive/init.aspx?cartGuid=',
+        cartEndpointX: '/init/',
         cookieTTL: 30,                              // in days
         pxWidth: 470,                               // default px width of cart tray
     },
@@ -156,6 +156,7 @@ var __CartWidget = {
             React.createElement(CartUI_Container, {camps: null, isVisible: false, pxWidth: this.settings.pxWidth}, null),
             document.getElementById('cartContainer')
         );
+        $('body').attr('style', null);
     },
 
     listCamps: function (camps) {
@@ -164,6 +165,7 @@ var __CartWidget = {
             React.createElement(CartUI_Container, {camps: camps, isVisible: true, pxWidth: this.settings.pxWidth}, null),
             document.getElementById('cartContainer')
         );
+        $('body').css('overflow-y', 'hidden');
     },
 
 
@@ -174,7 +176,7 @@ var __CartWidget = {
 
     goToCart: function () {
         var cartGuid = this.getCartGuid();
-        var path = this.settings.path[0] + this.settings.cartEndpoint + '?cartGuid=' + cartGuid;
+        var path = this.settings.path[0] + this.settings.cartEndpoint + cartGuid;
         window.location.href = path;
     },
 

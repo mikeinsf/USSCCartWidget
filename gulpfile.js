@@ -76,6 +76,7 @@ gulp.task('css', function() {
 });
 
 gulp.task('copy-index', function() {
+    gulp.src('./src/**/*.html').pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
     gulp.src('./src/**/*.html').pipe(gulp.dest('./index'));
     gulp.src('./src/optisite.css').pipe(gulp.dest('./index'));
 });
