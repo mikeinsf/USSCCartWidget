@@ -10,9 +10,23 @@ var __CartWidget = {
         cartEndpoint: '/responsive/init.aspx?cartGuid=',
         cartEndpointX: '/init/',
         cookieTTL: 30,                              // in days
-        pxWidth: 470,                               // default px width of cart tray
+        datemask: 'MM/DD/YYYY',
     },
     
+    normalizeDate: function (sDate) {
+        // relies on momentjs library
+        var s = this.settings;
+        var retval = sDate;
+        if (typeof (moment) == 'undefined' || typeof (s.datemask) == 'undefined') {
+            if (typeof (moment) == 'undefined') { console.error('momentjs library not loaded'); }
+            if (typeof (s.datemask) == 'undefined') { console.error('datemask not defined'); }
+            return retval;
+        } else {
+            try{ retval = moment(sDate, 'MM/DD/YYYY hh:mm:ss A').format(s.datemask); } 
+            catch(e) { console.error('Error converting datetime [' + sDate + '] using mask [' + s.datemask + ']' , e); }
+        }
+        return retval;
+    },
 
 
     ////////////////////////
@@ -35,18 +49,14 @@ var __CartWidget = {
                 this.errors.push('Settings object __CartParams must have a value for "hostSiteGuid".');
             if (!u.hasOwnProperty('targetSiteGuid')) 
                 this.errors.push('Settings object __CartParams must have a value for "targetSiteGuid".');
+            if (u.hasOwnProperty('datemask')) {
+                s.datemask = u.datemask;
+            }
             if (u.hasOwnProperty('insertDomId')) {
                 if (document.getElementById(u.insertDomId) == null) {
                     console.log('Cannot find user-specified DOM element id="' + u.insertDomId + '". Fix or omit setting for __CartParams.insertDomId to eliminate this warning. Using default DOM element id="' + d.insertDomId + '".');
                 } else {
                     s.insertDomId = u.insertDomId;
-                }
-            }
-            if (u.hasOwnProperty('pxWidth')) {
-                if (isInt(u.pxWidth)) {
-                    s.pxWidth = u.pxWidth;
-                } else {
-                    this.errors.push('Bad setting for pxWidth (' + u.pxWidth + '). Value must be a positive integer, or leave it blank for default width.');
                 }
             }
         } else {
@@ -79,7 +89,7 @@ var __CartWidget = {
         }
         
         // load the cart CSS
-        var cssUrl = s.path[0] + s.path[1] + '/style.css';
+        var cssUrl = s.path[0] + s.path[1] + '/style.css[RANDOM]';
         this.loadCSS(cssUrl);
 
             var div = document.createElement('div');
@@ -98,7 +108,7 @@ var __CartWidget = {
         cartContainer.className = '--cart-container';
         document.getElementById(DOMId).appendChild(cartContainer);
         React.render(
-            React.createElement(CartUI_Container, {camps: null, isVisible: false, pxWidth: s.pxWidth}, null),
+            React.createElement(CartUI_Container, {camps: null, isVisible: false}, null),
             document.getElementById('cartContainer')
         );
     },
@@ -153,19 +163,22 @@ var __CartWidget = {
     
     hideWidget: function() {
         React.render(
-            React.createElement(CartUI_Container, {camps: null, isVisible: false, pxWidth: this.settings.pxWidth}, null),
+            React.createElement(CartUI_Container, {camps: null, isVisible: false}, null),
             document.getElementById('cartContainer')
         );
-        $('body').attr('style', null);
+        $('body').prepend($('[body-container]>div.footer'));
+        $('body').prepend($('[body-container]>div.outer-wrapper'));
+        $('[body-container]').remove();
     },
 
     listCamps: function (camps) {
-        // camps is an array of camp objects
+        $('body').append('<div body-container="" style="overflow:hidden;"></div>');
+        $('[body-container]').append($('body>div.outer-wrapper'));
+        $('[body-container]').append($('body>div.footer'));
         React.render(
-            React.createElement(CartUI_Container, {camps: camps, isVisible: true, pxWidth: this.settings.pxWidth}, null),
+            React.createElement(CartUI_Container, {camps: camps, isVisible: true}, null),
             document.getElementById('cartContainer')
         );
-        $('body').css('overflow-y', 'hidden');
     },
 
 

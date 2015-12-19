@@ -11,6 +11,7 @@ var eslint = require('gulp-eslint');
 
 // From tutorial: http://tylermcginnis.com/reactjs-tutorial-pt-2-building-react-applications-with-gulp-and-browserify/
 var uglify = require('gulp-uglify');
+var replace = require('gulp-replace');
 var htmlreplace = require('gulp-html-replace');
 var source = require('vinyl-source-stream');
 
@@ -76,19 +77,24 @@ gulp.task('css', function() {
 });
 
 gulp.task('copy-index', function() {
-    gulp.src('./src/**/*.html').pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
-    gulp.src('./src/**/*.html').pipe(gulp.dest('./index'));
+    var rnd = '?_=LT' + Math.random();
+    gulp.src('./src/**/*.html').pipe(replace('[RANDOM]', rnd)).pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
+    gulp.src('./src/**/*.html').pipe(replace('[RANDOM]', rnd)).pipe(gulp.dest('./index'));
     gulp.src('./src/optisite.css').pipe(gulp.dest('./index'));
 });
 
 gulp.task('copy-assets', ['copy-index'], function() {
+    var rnd = '?_=LT' + Math.random();
     var files = [
         './src/**/*.js',
+        './node_modules/moment/moment.js',
         './node_modules/jquery/dist/jquery.js',
         './node_modules/react/dist/react.js',
         './node_modules/js-cookie/src/js.cookie.js',
     ];
     gulp.src(files)
+    .pipe(replace('[RANDOM]', rnd))
+    .pipe(replace('urlArgs: "?_', 'urlArgs: "_'))
     .pipe(gulp.dest('build'))
     .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
     .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));

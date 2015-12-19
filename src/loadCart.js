@@ -35,8 +35,9 @@
 
     // opted for jquery method of loading requirejs because IE (surprise surprise) does not like dynamic setting of non-standard tag attributes like "data-main"
     // this requires that jquery library MUST BE LOADED FIRST
+    // gulp will replace [RANDOM] with a random number
     $(document).ready(function(){
-        $('head').append('<script src="' + scriptPath + '/require.js" data-main="' + scriptPath + '/main.js"></script>');
+        $('head').append('<script src="' + scriptPath + '/require.js" data-main="' + scriptPath + '/main.js[RANDOM]"></script>');
     });
 
     // this is commented out bc IE is terrible

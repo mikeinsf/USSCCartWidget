@@ -6,8 +6,6 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="optisite.css">
         <style>
             body {
@@ -37,68 +35,72 @@
 
     <body>
 
-        <h1>USSC Cart Widget Demos</h1>
+        <div class="outer-wrap">
 
-        <div class="third">
-            
-            <button onclick="__CartWidget.showWidget();">Show the cart widget</button>
+            <h1>USSC Cart Widget Demos</h1>
 
-            <button onclick="__CartWidget.hideWidget();">Hide the cart widget</button>
-            
-            <fieldset>
+            <div class="third">
                 
-                <div>These buttons require an item id.</div>
+                <button onclick="__CartWidget.showWidget();">Show the cart widget</button>
 
-                <div><span>Enter it here:</span> <input type="text" name="campno" id="campno"/></div>
+                <button onclick="__CartWidget.hideWidget();">Hide the cart widget</button>
                 
-                <button onclick="__CartWidget.add($('#campno').val());">Add item to cart, show cart</button>
-                
-                <button onclick="__CartWidget.delete($('#campno').val());">Delete item from cart, show cart</button>
+                <fieldset>
+                    
+                    <div>These buttons require an item id.</div>
 
-            </fieldset>
+                    <div><span>Enter it here:</span> <input type="text" name="campno" id="campno"/></div>
+                    
+                    <button onclick="__CartWidget.add($('#campno').val());">Add item to cart, show cart</button>
+                    
+                    <button onclick="__CartWidget.delete($('#campno').val());">Delete item from cart, show cart</button>
 
-            <button onclick="__CartWidget.goToCart();">Proceed to Checkout</button>
+                </fieldset>
 
-        </div>
+                <button onclick="__CartWidget.goToCart();">Proceed to Checkout</button>
 
-        <div class="third">
-            <h4>Steps to integrate:</h4>
-            <ol>
-                <li style="color:red;">This sample page must be run over an HTTP server, not from the file system! The dependent scripts will not load properly if loading from the file system. Likewise with any other integration testbed. HTTP or HTTPS only.</li>
-                <li>Insert the entire script tag anywhere in your template</li>
-                <li>Set the width of the cart widget tray as you'd like it to appear. If you omit this, it will default to 470px wide.</li>
-                <li>NOTE: Each individual site will get unique targetSiteGuid, hostSiteGuid, and path values !! Be sure to set these correctly when we migrate to other environments.</li>
-                <li>The methods available to you are:
-                    <ul>
-                        <li>__CartWidget.showWidget()</li>
-                        <li>__CartWidget.hideWidget()</li>
-                        <li>__CartWidget.add()</li>
-                        <li>__CartWidget.delete()</li>
-                        <li>__CartWidget.goToCart()</li>
-                    </ul>
-                    <p>The methods I see you most likely using are add(), goToCart() and showWidget(). hideWidget() and delete() are taken care of in my script functionality.</p>
-                </li>
-            </ol>
-        </div>
+            </div>
 
-        <div class="third">
-            <h4>Optisite ToDos:</h4>
-            <p>Use this sample page to help you wire up the methods to your template as you need.</p>
-            <p>The cart widget has almost no CSS applied to it yet. I'm relying on Optisite to look at the fields available, and get back to me with an HTML snippet for how you'd like the listing of cart items to appear, and any other cart widget content. If you can supply production-ready HTML with correct CSS classes applied, that would be best! Remember that since this widget will load on your page, that your CSS style sheets will apply to it. You can define the HTML inside of div.cart-box-fix pretty much however you'd like. Note that the data-reactid attributes will be part of the final code output, but this should not get in  your way. </p>
+            <div class="third">
+                <h4>Steps to integrate:</h4>
+                <ol>
+                    <li style="color:red;">This sample page must be run over an HTTP server, not from the file system! The dependent scripts will not load properly if loading from the file system. Likewise with any other integration testbed. HTTP or HTTPS only.</li>
+                    <li>Insert the entire script tag anywhere in your template</li>
+                    <li>Set the width of the cart widget tray as you'd like it to appear. If you omit this, it will default to 470px wide.</li>
+                    <li>NOTE: Each individual site will get unique targetSiteGuid, hostSiteGuid, and path values !! Be sure to set these correctly when we migrate to other environments.</li>
+                    <li>The methods available to you are:
+                        <ul>
+                            <li>__CartWidget.showWidget()</li>
+                            <li>__CartWidget.hideWidget()</li>
+                            <li>__CartWidget.add()</li>
+                            <li>__CartWidget.delete()</li>
+                            <li>__CartWidget.goToCart()</li>
+                        </ul>
+                        <p>The methods I see you most likely using are add(), goToCart() and showWidget(). hideWidget() and delete() are taken care of in my script functionality.</p>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="third">
+                <h4>Optisite ToDos:</h4>
+                <p>Use this sample page to help you wire up the methods to your template as you need.</p>
+                <p>The cart widget has almost no CSS applied to it yet. I'm relying on Optisite to look at the fields available, and get back to me with an HTML snippet for how you'd like the listing of cart items to appear, and any other cart widget content. If you can supply production-ready HTML with correct CSS classes applied, that would be best! Remember that since this widget will load on your page, that your CSS style sheets will apply to it. You can define the HTML inside of div.cart-box-fix pretty much however you'd like. Note that the data-reactid attributes will be part of the final code output, but this should not get in  your way. </p>
+            </div>
+
         </div>
 
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script id="cartWidgetScript">
+            // gulp will replace [RANDOM] with a random number
             var __CartParams = {
-                targetSiteGuid  : 'eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico',       // required
-                hostSiteGuid    : 'IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE',       // required
-                _path           : ['//securetest.ussportscamps.com', '/cartwidget', '/loadCart.js'],        // required
-                path            : ['//localhost:55062', '/cartwidget', '/loadCart.js'],        // required
-                pxWidth         : '300',                                                                    // optional. default is 300px
+                targetSiteGuid  : 'eZsTuCRHDoo2hmMpluZvcy5AhQtsHv9GkWaLh3f03supFywaQHKoOtLIGNyeLico',               // required
+                hostSiteGuid    : 'IkKozURhdt6gapeBlDkzRjtCrjGWE9+L5vml0v63yXblrHUTcGbuxE6sbbLfProE',               // required
+                _path           : ['//securetest.ussportscamps.com', '/cartwidget', '/loadCart.js', '[RANDOM]'],     // required
+                path            : ['//localhost:55062', '/cartwidget', '/loadCart.js', '[RANDOM]'],                // required
             }; 
             (function() {
                 var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
-                sc.src = __CartParams.path[0] + __CartParams.path[1] + __CartParams.path[2];
+                sc.src = __CartParams.path[0] + __CartParams.path[1] + __CartParams.path[2] + __CartParams.path[3];
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
             })();
         </script>

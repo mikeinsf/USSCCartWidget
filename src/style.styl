@@ -1,8 +1,7 @@
-
 .--cart-container {
     
     .overlay {
-        position: absolute;
+        position: fixed;
         z-index: 999;
         width: 100%;
         height: 100%;
@@ -19,6 +18,7 @@
     }
     
     .cart-box {
+        width: 0;
         z-index: 999999;
         position: absolute;
         transition: width .6s;
@@ -26,53 +26,33 @@
         right: 0;
         top: 0;
         background-color: #EEEEEE;
-        overflow: hidden;
+        box-shadow: -5px 5px 25px #888888;
 
-        .cart-box-fix {
-            overflow: hidden;
+        .hide-this {
+            display: none;
         }
-
-/*        .checkout-button {
-            margin: 10px 0;
-        }
-        
-        .camp-list {
-            float: left;
-            clear: both;
-            padding: 0 20px;
-            
-            li {
-                clear: both;
-                margin-bottom: 10px;
-            }
-        }*/
         
     }
-
-/*    .camp-list-item {
-        float: left;
-        margin: 10px 0;
-        font-size: 12px;
-
-        .lbl {
-            font-weight: bold;
-        }
-
-        .camp-name {
-            font-size: 14pt;
-            font-weight: bold;
-        }
-
-        .camp-delete {
-            clear: both;
-            float: left;
-            width: 100%;
-        }
-
-        .delete-button {
-            margin: 8px 0;
-        }
-    }*/
     
 }
 
+
+@media (min-width: 0px) {
+    .--cart-container .cart-box.visible { width:100%; }
+    .--cart-container .cart-box .cart-box-fix { width:100%; }
+}
+
+@media (min-width: 300px) {
+    .--cart-container .cart-box.visible { width:300px; }
+    .--cart-container .cart-box .cart-box-fix { width:300px; }
+}
+
+@media (min-width: 500px) {
+    .--cart-container .cart-box.visible { width:400px; }
+    .--cart-container .cart-box .cart-box-fix { width:400px; }
+}
+
+@media (min-width: 600px) {
+    .--cart-container .cart-box.visible { width:500px; }
+    .--cart-container .cart-box .cart-box-fix { width:500px; }
+}
