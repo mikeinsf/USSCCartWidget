@@ -29,13 +29,13 @@ var CartUI_Container = React.createClass({
                             <h2>Your Cart</h2>
                             <div className="arrow-down-dark"></div>
                             <div className="button-wrap">
-                                <button className={cx({'btn-checkout': true, 'hide-this': !allowCheckout})} onClick={this.onClick_checkout}>Proceed to Checkout</button>
                                 <button className="btn-continueshopping" onClick={this.onClick_overlay}>Continue Shopping</button>
+                                <button className={cx({'btn-checkout': true, 'hide-this': !allowCheckout})} onClick={this.onClick_checkout}>Proceed to Checkout<span className="icon-arrow-right"></span></button>
                             </div>
                             <div className="camp-list"><div className="camp-list-inner-wrapper"><CampList camps={this.props.camps} /></div></div>
                             <div className="button-wrap">
-                                <button className={cx({'btn-checkout': true, 'hide-this': !allowCheckout})} onClick={this.onClick_checkout}>Proceed to Checkout</button>
                                 <button className="btn-continueshopping" onClick={this.onClick_overlay}>Continue Shopping</button>
+                                <button className={cx({'btn-checkout': true, 'hide-this': !allowCheckout})} onClick={this.onClick_checkout}>Proceed to Checkout<span className="icon-arrow-right"></span></button>
                             </div>
                         </div>
                     </div>
