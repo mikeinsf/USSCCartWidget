@@ -46,7 +46,7 @@ var size = require('gulp-size');
 // SEE https://github.com/PixelsCommander/ReactiveElements/blob/master/demo/index.html
 
 gulp.task('clean', [], function(callback) {
-    del(['./build/*', '../USSC_CartWS/USSC_CartWS/cart-widget/*'], callback);
+    del(['./build/*', '../USSC_Registration_Encrypted/USSC/cartwidget/*'], callback);
 });
 
 gulp.task('connect', function() {
@@ -72,7 +72,6 @@ gulp.task('css', function() {
         .pipe(stylus())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('build'))
-        .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
         .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
 });
 
@@ -96,7 +95,6 @@ gulp.task('copy-assets', ['copy-index'], function() {
     .pipe(replace('[RANDOM]', rnd))
     .pipe(replace('urlArgs: "?_', 'urlArgs: "_'))
     .pipe(gulp.dest('build'))
-    .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
     .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
 });
 
@@ -104,7 +102,6 @@ gulp.task('transpile-js', function() {
     return gulp.src('./src/**/*.jsx')
     .pipe(react({harmony: true}))
     .pipe(gulp.dest('build'))
-    .pipe(gulp.dest('../USSC_CartWS/USSC_CartWS/cart-widget'))
     .pipe(gulp.dest('../USSC_Registration_Encrypted/USSC/cartwidget'));
 })
 
